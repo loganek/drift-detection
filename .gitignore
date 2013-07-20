@@ -3,6 +3,12 @@
 *.lo
 *.o
 
+# Debug Object files
+*.d
+
+# Executable file
+drift_detection
+
 # Compiled Dynamic libraries
 *.so
 *.dylib

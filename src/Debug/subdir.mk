@@ -4,12 +4,15 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 CPP_SRCS += \
+../detector.cpp \
 ../drift_detection.cpp 
 
 OBJS += \
+./detector.o \
 ./drift_detection.o 
 
 CPP_DEPS += \
+./detector.d \
 ./drift_detection.d 
 
 

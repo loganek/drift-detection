@@ -1,6 +1,13 @@
-#include <opencv2/highgui/highgui.hpp>
-#include <opencv2/imgproc/imgproc.hpp>
+/*
+ * drift_detection.h
+ *
+ *  Created on: 20 lip 2013
+ *      Author: loganek
+ */
+
 #include "image_source.h"
+#include "detector.h"
+#include <opencv2/highgui/highgui.hpp>
 
 using namespace cv;
 using namespace std;
@@ -8,15 +15,20 @@ using namespace std;
 template<typename DisplayPolicy>
 int MainLoop()
 {
-	Mat img;
+	Mat image;
 	ImageSource<DisplayPolicy> imgProvider("/home/loganek/Downloads/naturalny.wmv");
+	Detector detector;
 
-	img = imgProvider.GetImage();
+	image = imgProvider.GetImage();
+	detector.PushImage(image);
 
-	while (!img.empty())
+	while (!image.empty())
 	{
-		imshow("TEST", img);
-		img = imgProvider.GetImage();
+		image = imgProvider.GetImage();
+		detector.PushImage(image);
+
+		detector.Process();
+		imshow("TEST", image);
 	}
 
 	return 0;
