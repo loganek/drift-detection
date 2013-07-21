@@ -14,6 +14,9 @@ struct FeatureListDebugOperator
 {
 	static void Process(cv::Mat& image, const Detector::DebugInfo& debugInfo)
 	{
+		for (auto center : debugInfo.features[0])
+					cv::circle(image, center, 3, cv::Scalar(0, 255, 0));
+
 		for (auto center : debugInfo.features[1])
 			cv::circle(image, center, 3, cv::Scalar(0, 255, 255));
 	}

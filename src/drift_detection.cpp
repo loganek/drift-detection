@@ -22,14 +22,21 @@ int MainLoop()
 
 	image = imgProvider.GetImage();
 	detector.PushImage(image);
-
+	int i =0;
 	while (!image.empty())
 	{
 		image = imgProvider.GetImage();
 		detector.PushImage(image);
-
-		detector.Process();
-		imshow("TEST", DebugImageGenerator<FeatureListDebugOperator>()(image, detector.GetDebugInfo()));
+		if (i%2)
+		{
+			detector.Process();
+			imshow("TEST", DebugImageGenerator<FeatureListDebugOperator>()(image, detector.GetDebugInfo()));
+		}
+		else
+		{
+			imshow("TEST", image);
+		}
+		i++;
 	}
 
 	return 0;

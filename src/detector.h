@@ -28,11 +28,12 @@ private:
 	FeatureList features;
 
 	constexpr static int maxFeatures = 100;
-	const cv::TermCriteria criteria = cv::TermCriteria(cv::TermCriteria::COUNT|cv::TermCriteria::EPS,20,0.03);
+	constexpr static size_t minFeatures = 5;
+	const cv::TermCriteria termCriteria = cv::TermCriteria(cv::TermCriteria::COUNT|cv::TermCriteria::EPS,20,0.03);
 
 	bool NeedFeatures();
 	bool CanProcess();
-	void UpdateFeatures();
+	void CalculateFeatures();
 
 	DebugInfo debugInfo;
 public:
