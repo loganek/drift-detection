@@ -7,6 +7,7 @@
 
 #include "image_source.h"
 #include "detector.h"
+#include "debug_image_generator.h"
 #include <opencv2/highgui/highgui.hpp>
 
 using namespace cv;
@@ -28,13 +29,13 @@ int MainLoop()
 		detector.PushImage(image);
 
 		detector.Process();
-		imshow("TEST", image);
+		imshow("TEST", DebugImageGenerator<FeatureListDebugOperator>()(image, detector.GetDebugInfo()));
 	}
 
 	return 0;
 }
-
+struct X{void operator()(){printf("arst");}};
 int main()
 {
-	return MainLoop<Continuous>();
+	return MainLoop<FrameByFrame>();
 }
