@@ -34,7 +34,7 @@ int MainLoop()
 
 	return 0;
 }
-struct X{void operator()(){printf("arst");}};
+
 int main()
 {
 	return MainLoop<FrameByFrame>();
