@@ -76,6 +76,11 @@ void Detector::CalculateFeatures()
 {
 	static Size winSize(10, 10), minusOneSize(-1, -1);
 
+	int aerode = 1;
+	erode(currImage, currImage, getStructuringElement( MORPH_CROSS,
+			Size( aerode*aerode + 1, aerode*aerode+1 ),
+			Point( aerode, aerode ) ));
+
 	goodFeaturesToTrack(currImage, features[0], maxFeatures, 0.1, 50, featureROI, 3, false, 0.4);
 	cornerSubPix(currImage, features[0], winSize, minusOneSize, termCriteria);
 }
