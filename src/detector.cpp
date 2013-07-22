@@ -8,12 +8,22 @@
 #include "detector.h"
 #include <stdexcept>
 #include <opencv2/video/tracking.hpp>
-
+#include <opencv2/highgui.hpp>
 using namespace cv;
 using namespace std;
 
 Detector::Detector()
 {
+	CalculateFeatureROI(Rect(160, 60, 540, 400));
+}
+
+void Detector::CalculateFeatureROI(const Rect& roi)
+{
+	featureROI = Mat(480, 854, CV_8UC1, Scalar(0));
+
+	for (int i = roi.y; i < roi.y + roi.height - 30; i++)
+		for (int j = roi.x; j < roi.x + roi.width; j++)
+			featureROI.at<unsigned char>(i, j) = 255;
 }
 
 Detector::~Detector()
@@ -45,7 +55,7 @@ bool Detector::CanProcess()
 
 void Detector::Process()
 {
-	static Size windowSize(31, 31);
+	static Size windowSize(100, 100);
 
 	if (!CanProcess())
 		throw runtime_error("Cannot run algorithm: not enough images.");
@@ -53,7 +63,8 @@ void Detector::Process()
 	vector<unsigned char> status;
 	vector<float> err;
 
-	calcOpticalFlowPyrLK(prevImage, currImage, features[0], features[1], status, err, windowSize, 3, termCriteria, 0, 0.01);
+	calcOpticalFlowPyrLK(prevImage, currImage, features[0], features[1], status, err, windowSize, 5, termCriteria, 0, 0.001);
+	debugInfo.featureStatus = status;
 }
 
 bool Detector::NeedFeatures()
@@ -65,6 +76,6 @@ void Detector::CalculateFeatures()
 {
 	static Size winSize(10, 10), minusOneSize(-1, -1);
 
-	goodFeaturesToTrack(currImage, features[0], maxFeatures, 0.1, 10, Mat(), 3, false, 0.4);
+	goodFeaturesToTrack(currImage, features[0], maxFeatures, 0.1, 50, featureROI, 3, false, 0.4);
 	cornerSubPix(currImage, features[0], winSize, minusOneSize, termCriteria);
 }

@@ -15,25 +15,30 @@
 class Detector
 {
 public:
-	typedef std::array<std::vector<cv::Point2f>, 2> FeatureList;
+	typedef std::vector<cv::Point2f> PointList;
+	typedef std::array<PointList, 2> FeatureList;
 
 	struct DebugInfo
 	{
 		Detector::FeatureList features;
+		std::vector<unsigned char> featureStatus;
 	};
 private:
 	cv::Mat prevImage;
 	cv::Mat currImage;
+	cv::Mat featureROI;
 
 	FeatureList features;
 
-	constexpr static int maxFeatures = 100;
+	constexpr static int maxFeatures = 50;
 	constexpr static size_t minFeatures = 5;
 	const cv::TermCriteria termCriteria = cv::TermCriteria(cv::TermCriteria::COUNT|cv::TermCriteria::EPS,20,0.03);
 
 	bool NeedFeatures();
 	bool CanProcess();
 	void CalculateFeatures();
+
+	void CalculateFeatureROI(const cv::Rect& roi);
 
 	DebugInfo debugInfo;
 public:
