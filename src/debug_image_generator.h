@@ -30,12 +30,12 @@ struct ArrowFlowDebugOperator
 {
 private:
 
-	static void DrawArrow(cv::Mat& image, cv::Point2f second, cv::Point2f first)
+	static void DrawArrow(cv::Mat& image, cv::Point2f second, cv::Point2f first, double angle)
 	{
 		cv::Scalar color(0, 255, 0);
 		cv::Point2f p(first.x, first.y),
 				q(second.x, second.y);
-		double angle = atan2(p.y - q.y, p.x - q.x);
+		angle *= M_PI / 180.0;
 
 		cv::line( image, p, q, color);
 
@@ -55,7 +55,7 @@ public:
 		{
 			if (debugInfo.featureStatus[i])
 			{
-				DrawArrow(image, debugInfo.features[0][i], debugInfo.features[1][i]);
+				DrawArrow(image, debugInfo.features[0][i], debugInfo.features[1][i], debugInfo.angles[i]);
 			}
 		}
 	}

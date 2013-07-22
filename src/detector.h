@@ -17,16 +17,21 @@ class Detector
 public:
 	typedef std::vector<cv::Point2f> PointList;
 	typedef std::array<PointList, 2> FeatureList;
+	typedef std::array<unsigned char, 360> AnglesHistogram;
 
 	struct DebugInfo
 	{
 		Detector::FeatureList features;
 		std::vector<unsigned char> featureStatus;
+		std::vector<int> angles;
 	};
 private:
 	cv::Mat prevImage;
 	cv::Mat currImage;
 	cv::Mat featureROI;
+
+	std::vector<unsigned char> status;
+	std::vector<int> angles;
 
 	FeatureList features;
 
@@ -37,6 +42,11 @@ private:
 	bool NeedFeatures();
 	bool CanProcess();
 	void CalculateFeatures();
+	void CalculateAngles();
+	AnglesHistogram BuildHistogram();
+	int GetMostCommonAngle(int range);
+
+	void RemoveStrangePoints();
 
 	void CalculateFeatureROI(const cv::Rect& roi);
 
