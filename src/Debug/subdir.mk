@@ -4,14 +4,17 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 CPP_SRCS += \
+../average_vector_computer.cpp \
 ../detector.cpp \
 ../drift_detection.cpp 
 
 OBJS += \
+./average_vector_computer.o \
 ./detector.o \
 ./drift_detection.o 
 
 CPP_DEPS += \
+./average_vector_computer.d \
 ./detector.d \
 ./drift_detection.d 
 

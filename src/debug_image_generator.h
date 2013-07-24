@@ -16,7 +16,7 @@
 
 struct FeatureListDebugOperator
 {
-	static void Process(cv::Mat& image, const Detector::DebugInfo& debugInfo)
+	static void Process(cv::Mat& image, const DebugInfo& debugInfo)
 	{
 		for (auto center : debugInfo.features[0])
 					cv::circle(image, center, 3, cv::Scalar(0, 255, 0));
@@ -49,7 +49,7 @@ private:
 	}
 
 public:
-	static void Process(cv::Mat& image, const Detector::DebugInfo& debugInfo)
+	static void Process(cv::Mat& image, const DebugInfo& debugInfo)
 	{
 		for (size_t i = 0; i < debugInfo.featureStatus.size(); i++)
 		{
@@ -67,19 +67,19 @@ class DebugImageGenerator
 private:
 	template<std::size_t I = 0, typename... Tp>
 	inline typename std::enable_if<I == sizeof...(Tp), void>::type
-	Process(std::tuple<Tp...>& t, cv::Mat, const Detector::DebugInfo& debugInfo)
+	Process(std::tuple<Tp...>& t, cv::Mat, const DebugInfo& debugInfo)
 	{}
 
 	template<std::size_t I = 0, typename... Tp>
 	inline typename std::enable_if<I < sizeof...(Tp), void>::type
-	Process(std::tuple<Tp...>& t, cv::Mat& image, const Detector::DebugInfo& debugInfo)
+	Process(std::tuple<Tp...>& t, cv::Mat& image, const DebugInfo& debugInfo)
 	{
 		std::get<I>(t).Process(image, debugInfo);
 		Process<I + 1, Tp...>(t, image, debugInfo);
 	}
 
 public:
-	cv::Mat operator()(const cv::Mat& image, const Detector::DebugInfo& debugInfo)
+	cv::Mat operator()(const cv::Mat& image, const DebugInfo& debugInfo)
 	{
 		cv::Mat img;
 

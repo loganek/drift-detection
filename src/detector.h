@@ -11,27 +11,24 @@
 #include <opencv2/core/mat.hpp>
 #include <vector>
 #include <array>
+#include "types.h"
+#include "average_vector_computer.h"
+
+struct DebugInfo
+{
+	FeatureList features;
+	std::vector<unsigned char> featureStatus;
+	std::vector<int> angles;
+};
 
 class Detector
 {
-public:
-	typedef std::vector<cv::Point2f> PointList;
-	typedef std::array<PointList, 2> FeatureList;
-	typedef std::array<unsigned char, 360> AnglesHistogram;
-
-	struct DebugInfo
-	{
-		Detector::FeatureList features;
-		std::vector<unsigned char> featureStatus;
-		std::vector<int> angles;
-	};
 private:
 	cv::Mat prevImage;
 	cv::Mat currImage;
 	cv::Mat featureROI;
 
 	std::vector<unsigned char> status;
-	std::vector<int> angles;
 
 	FeatureList features;
 
@@ -51,6 +48,8 @@ private:
 	void CalculateFeatureROI(const cv::Rect& roi);
 
 	DebugInfo debugInfo;
+
+	AverageVectorComputer* avComputer;
 public:
 	Detector();
 	virtual ~Detector();
