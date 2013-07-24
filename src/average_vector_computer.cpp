@@ -4,7 +4,7 @@
  *  Created on: 24 lip 2013
  *      Author: loganek
  */
-
+#include <iostream>
 #include "average_vector_computer.h"
 #include "detector.h"
 
@@ -23,10 +23,33 @@ AverageVectorComputer::~AverageVectorComputer()
 
 void AverageVectorComputer::ComputeAverageVector()
 {
+	CleanVectors();
 	CalculateAngles();
-	GetMeanLength();
+	RemoveStrangePoints();
+	CleanVectors();
+	cout << GetMeanLength() << endl;
+
+	debugInfo.featureStatus = status;
+	debugInfo.angles = angles;
 }
 // TODO: split CalculateAngles and RemoveStrangePoints together (in one loop and 'if' statement)
+
+void AverageVectorComputer::CleanVectors()
+{
+	/*size_t i = 0;
+
+	while (i < status.size())
+	{
+		if (status[i])
+		{
+			status.erase(status.begin() + i);
+			features[0].erase(features[0].begin() + i);
+			features[1].erase(features[1].begin() + i);
+		}
+		else
+			i++;
+	}*/
+}
 
 AnglesHistogram AverageVectorComputer::BuildHistogram()
 {
@@ -51,8 +74,6 @@ void AverageVectorComputer::CalculateAngles()
 		if (status[i])
 			angles[i] = int(atan2(features[1][i].y - features[0][i].y, features[1][i].x - features[0][i].x) * 180 / M_PI);
 	}
-
-	debugInfo.angles = angles;
 }
 
 void AverageVectorComputer::RemoveStrangePoints()
@@ -97,5 +118,18 @@ int AverageVectorComputer::GetMostCommonAngle(int range)
 
 double AverageVectorComputer::GetMeanLength()
 {
-	return 0.0;
+	double length = 0.0;
+	size_t cnt = 0;
+
+	for (size_t i = 0; i < status.size(); i++)
+	{
+		if (status[i])
+		{
+			length += sqrt((features[0][i].x - features[1][i].x) * (features[0][i].x - features[1][i].x) +
+					(features[0][i].y - features[1][i].y) * (features[0][i].y - features[1][i].y));
+			cnt++;
+		}
+	}
+
+	return length / cnt;
 }
