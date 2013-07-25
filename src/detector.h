@@ -21,6 +21,7 @@ struct DebugInfo
 	std::vector<unsigned char> featureStatus;
 	std::vector<int> angles;
 	DriftVector driftVector;
+	PointList* route;
 };
 
 class Detector
@@ -30,7 +31,10 @@ private:
 	cv::Mat currImage;
 	cv::Mat featureROI;
 
+	DriftVector vect;
 	std::vector<unsigned char> status;
+
+	PointList route;
 
 	FeatureList features;
 
@@ -41,11 +45,7 @@ private:
 	bool NeedFeatures();
 	bool CanProcess();
 	void CalculateFeatures();
-	void CalculateAngles();
-	AnglesHistogram BuildHistogram();
-	int GetMostCommonAngle(int range);
-
-	void RemoveStrangePoints();
+	void UpdateRoute();
 
 	void CalculateFeatureROI(const cv::Rect& roi);
 

@@ -9,6 +9,7 @@
 #define AVERAGEVECTORCOMPUTER_H_
 
 #include "types.h"
+#include "drift_vector.h"
 
 struct DebugInfo;
 
@@ -34,7 +35,7 @@ public:
 	AverageVectorComputer(DebugInfo& debugInfo, std::vector<unsigned char>& status, FeatureList& features);
 	virtual ~AverageVectorComputer();
 
-	void ComputeAverageVector();
+	DriftVector ComputeAverageVector();
 };
 
 #endif /* AVERAGEVECTORCOMPUTER_H_ */

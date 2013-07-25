@@ -21,18 +21,22 @@ AverageVectorComputer::~AverageVectorComputer()
 {
 }
 
-void AverageVectorComputer::ComputeAverageVector()
+DriftVector AverageVectorComputer::ComputeAverageVector()
 {
 	CleanVectors();
 	CalculateAngles();
 	int commonAngle = GetMostCommonAngle();
 	RemoveStrangePoints(commonAngle);
 	CleanVectors();
-	debugInfo.driftVector.length = GetMeanLength();
-	debugInfo.driftVector.angle = commonAngle;
+	DriftVector vect;
+	vect.length = GetMeanLength();
+	vect.angle = commonAngle;
 
+	debugInfo.driftVector = vect;
 	debugInfo.featureStatus = status;
 	debugInfo.angles = angles;
+
+	return vect;
 }
 // TODO: split CalculateAngles and RemoveStrangePoints together (in one loop and 'if' statement)
 

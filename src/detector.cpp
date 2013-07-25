@@ -16,6 +16,7 @@ using namespace std;
 
 Detector::Detector()
 {
+	debugInfo.route = &route;
 	CalculateFeatureROI(Rect(160, 60, 540, 400));
 	avComputer = new AverageVectorComputer(debugInfo, status, features);
 }
@@ -71,9 +72,20 @@ void Detector::Process()
 	calcOpticalFlowPyrLK(pyramid, currImage, features[0], features[1], status, err, windowSize, 5, termCriteria, 0, 0.001);
 
 	debugInfo.featureStatus = status;
-	avComputer->ComputeAverageVector();
+	vect = avComputer->ComputeAverageVector();
+
+	UpdateRoute();
 }
 
+void Detector::UpdateRoute()
+{
+	float angle = vect.angle * M_PI / 180;
+
+	float x = vect.length * cos(angle);
+	float y = vect.length * sin(angle);
+
+	route.push_back(cv::Point2f(x, y));
+}
 
 bool Detector::NeedFeatures()
 {

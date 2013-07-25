@@ -22,15 +22,19 @@ int MainLoop()
 
 	image = imgProvider.GetImage();
 	detector.PushImage(image);
+
 	int i =0;
 	while (!image.empty())
 	{
 		image = imgProvider.GetImage();
 		detector.PushImage(image);
-		if (i%2)
+		if (i > 2)
 		{
 			detector.Process();
-			imshow("TEST", DebugImageGenerator<ArrowFlowDebugOperator, MainArrowDebugOperator>()(image, detector.GetDebugInfo()));
+			imshow("TEST", DebugImageGenerator<
+					//ArrowFlowDebugOperator,
+					MainArrowDebugOperator,
+					DrawRouteDebugOperator>()(image, detector.GetDebugInfo()));
 		}
 		else
 		{
