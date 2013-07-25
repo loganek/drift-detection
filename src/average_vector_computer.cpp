@@ -25,9 +25,11 @@ void AverageVectorComputer::ComputeAverageVector()
 {
 	CleanVectors();
 	CalculateAngles();
-	RemoveStrangePoints();
+	int commonAngle = GetMostCommonAngle();
+	RemoveStrangePoints(commonAngle);
 	CleanVectors();
-	cout << GetMeanLength() << endl;
+	debugInfo.driftVector.length = GetMeanLength();
+	debugInfo.driftVector.angle = commonAngle;
 
 	debugInfo.featureStatus = status;
 	debugInfo.angles = angles;
@@ -76,11 +78,8 @@ void AverageVectorComputer::CalculateAngles()
 	}
 }
 
-void AverageVectorComputer::RemoveStrangePoints()
+void AverageVectorComputer::RemoveStrangePoints(int commonAngle)
 {
-	int range = 5;
-	int commonAngle = GetMostCommonAngle(range);
-
 	for (size_t i = 0; i < angles.size(); i++)
 	{
 		if (status[i] && (angles[i] < commonAngle - range || angles[i] > commonAngle + range))
@@ -88,7 +87,7 @@ void AverageVectorComputer::RemoveStrangePoints()
 	}
 }
 
-int AverageVectorComputer::GetMostCommonAngle(int range)
+int AverageVectorComputer::GetMostCommonAngle()
 {
 	AnglesHistogram newHistogram, histogram;
 

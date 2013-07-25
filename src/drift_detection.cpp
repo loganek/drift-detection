@@ -30,7 +30,7 @@ int MainLoop()
 		if (i%2)
 		{
 			detector.Process();
-			imshow("TEST", DebugImageGenerator<ArrowFlowDebugOperator>()(image, detector.GetDebugInfo()));
+			imshow("TEST", DebugImageGenerator<ArrowFlowDebugOperator, MainArrowDebugOperator>()(image, detector.GetDebugInfo()));
 		}
 		else
 		{

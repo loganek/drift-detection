@@ -28,11 +28,9 @@ struct FeatureListDebugOperator
 
 struct ArrowFlowDebugOperator
 {
-private:
-
-	static void DrawArrow(cv::Mat& image, cv::Point2f second, cv::Point2f first, double angle)
+protected:
+	static void DrawArrow(cv::Mat& image, cv::Point2f second, cv::Point2f first, double angle, cv::Scalar color = cv::Scalar(0, 255, 0))
 	{
-		cv::Scalar color(0, 255, 0);
 		cv::Point2f p(first.x, first.y),
 				q(second.x, second.y);
 		angle *= M_PI / 180.0;
@@ -58,6 +56,19 @@ public:
 				DrawArrow(image, debugInfo.features[0][i], debugInfo.features[1][i], debugInfo.angles[i]);
 			}
 		}
+	}
+};
+
+struct MainArrowDebugOperator : public ArrowFlowDebugOperator
+{
+	static void Process(cv::Mat& image, const DebugInfo& debugInfo)
+	{
+		double angle = debugInfo.driftVector.angle * M_PI / 180;
+		const cv::Point2f center(100, 100);
+		double x = debugInfo.driftVector.length * cos(angle);
+		double y = debugInfo.driftVector.length * sin(angle);
+
+		DrawArrow(image, center, cv::Point2f(x + center.x, y + center.y), debugInfo.driftVector.angle, cv::Scalar(50, 100, 150));
 	}
 };
 

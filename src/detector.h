@@ -13,12 +13,14 @@
 #include <array>
 #include "types.h"
 #include "average_vector_computer.h"
+#include "drift_vector.h"
 
 struct DebugInfo
 {
 	FeatureList features;
 	std::vector<unsigned char> featureStatus;
 	std::vector<int> angles;
+	DriftVector driftVector;
 };
 
 class Detector

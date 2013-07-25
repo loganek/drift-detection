@@ -20,9 +20,11 @@ private:
 	FeatureList& features;
 	std::vector<int> angles;
 
-	int GetMostCommonAngle(int range);
+	int range = 5;
+
+	int GetMostCommonAngle();
 	void CalculateAngles();
-	void RemoveStrangePoints();
+	void RemoveStrangePoints(int commonAngle);
 	AnglesHistogram BuildHistogram();
 	double GetMeanLength();
 
