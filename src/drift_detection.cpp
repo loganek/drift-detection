@@ -26,16 +26,18 @@ int MainLoop()
 	int i =0;
 	while (!image.empty())
 	{
+		cv::moveWindow("TEST", -60, 10);
 		image = imgProvider.GetImage();
 		detector.PushImage(image);
 		if (i > 2)
 		{
 			detector.Process();
 			imshow("TEST", DebugImageGenerator<
-					FeatureListDebugOperator,
-					ArrowFlowDebugOperator,
+					//FeatureListDebugOperator,
+					//ArrowFlowDebugOperator,
 					MainArrowDebugOperator,
-					DrawRouteDebugOperator>()(image, detector.GetDebugInfo()));
+					DrawRouteDebugOperator
+					>()(image, detector.GetDebugInfo()));
 		}
 		else
 		{
@@ -49,5 +51,5 @@ int MainLoop()
 
 int main()
 {
-	return MainLoop<FrameByFrame>();
+	return MainLoop<Continuous>();
 }

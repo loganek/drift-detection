@@ -76,10 +76,10 @@ struct DrawRouteDebugOperator
 {
 	static void Process(cv::Mat& image, const DebugInfo& debugInfo)
 	{
-		double dx = 100, dy = 100;
+		double dx = 400, dy = 250;
 		for (PointList::reverse_iterator delta = debugInfo.route->rbegin(); delta != debugInfo.route->rend(); delta++)
 		{
-			cv::line(image, cv::Point2f(dx, dy), cv::Point2f(dx + delta->x, dy + delta->y), cv::Scalar(200, 150, 50));
+			cv::line(image, cv::Point2f(dx, dy), cv::Point2f(dx + delta->x, dy + delta->y), cv::Scalar(200, 150, 50), 4);
 			dx += delta->x;
 			dy += delta->y;
 		}

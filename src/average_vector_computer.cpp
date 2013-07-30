@@ -86,7 +86,11 @@ void AverageVectorComputer::CalculateAngles()
 	for (size_t i = 0; i < status.size(); i++)
 	{
 		if (status[i])
+		{
 			angles[i] = int(atan2(features[1][i].y - features[0][i].y, features[1][i].x - features[0][i].x) * 180 / M_PI);
+			if (angles[i] < 0)
+				angles[i] += 360;
+		}
 	}
 }
 
