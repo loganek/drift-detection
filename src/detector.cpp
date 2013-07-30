@@ -96,6 +96,6 @@ void Detector::CalculateFeatures()
 {
 	static Size winSize(10, 10), minusOneSize(-1, -1);
 
-	goodFeaturesToTrack(currImage, features[0], maxFeatures, 0.1, 50, featureROI, 3, false, 0.4);
+	goodFeaturesToTrack(currImage, features[0], maxFeatures, 0.03, 50, featureROI, 3, false, 0.4);
 	cornerSubPix(currImage, features[0], winSize, minusOneSize, termCriteria);
 }

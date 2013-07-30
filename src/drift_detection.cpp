@@ -32,7 +32,8 @@ int MainLoop()
 		{
 			detector.Process();
 			imshow("TEST", DebugImageGenerator<
-					//ArrowFlowDebugOperator,
+					FeatureListDebugOperator,
+					ArrowFlowDebugOperator,
 					MainArrowDebugOperator,
 					DrawRouteDebugOperator>()(image, detector.GetDebugInfo()));
 		}

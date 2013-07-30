@@ -38,7 +38,7 @@ private:
 
 	FeatureList features;
 
-	constexpr static int maxFeatures = 50;
+	constexpr static int maxFeatures = 100;
 	constexpr static size_t minFeatures = 5;
 	const cv::TermCriteria termCriteria = cv::TermCriteria(cv::TermCriteria::COUNT|cv::TermCriteria::EPS,20,0.03);
 

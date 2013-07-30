@@ -29,8 +29,16 @@ DriftVector AverageVectorComputer::ComputeAverageVector()
 	RemoveStrangePoints(commonAngle);
 	CleanVectors();
 	DriftVector vect;
-	vect.length = GetMeanLength();
-	vect.angle = commonAngle;
+
+	int cnt = 0;
+	for (auto s : status)
+		if (s) cnt++;
+
+	if (cnt)
+	{
+		vect.length = GetMeanLength();
+		vect.angle = commonAngle;
+	}
 
 	debugInfo.driftVector = vect;
 	debugInfo.featureStatus = status;
