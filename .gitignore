@@ -9,6 +9,9 @@
 # Executable file
 drift_detection
 
+# Build path
+build/
+
 # Backup files
 *~
 
