@@ -67,9 +67,7 @@ void Detector::Process()
 
 	vector<float> err;
 
-	Mat pyramid = prevImage;
-
-	calcOpticalFlowPyrLK(pyramid, currImage, features[0], features[1], status, err, windowSize, 5, termCriteria, 0, 0.001);
+	calcOpticalFlowPyrLK(prevImage, currImage, features[0], features[1], status, err, windowSize, 5, termCriteria, 0, 0.001);
 
 	debugInfo.featureStatus = status;
 	vect = avComputer->ComputeAverageVector();
