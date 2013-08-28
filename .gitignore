@@ -15,6 +15,10 @@ build/
 # Backup files
 *~
 
+# Eclipse project files
+.cproject
+.project
+
 # Compiled Dynamic libraries
 *.so
 *.dylib
