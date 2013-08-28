@@ -11,7 +11,7 @@ add_executable(${PROJECT_NAME} ${SRC_LIST})
 
 target_link_libraries(drift_detection ${OpenCV_LIBS})
 
-SET(CMAKE_CXX_FLAGS "-std=c++0x")
+SET(CMAKE_CXX_FLAGS "-std=c++0x -Wall")
 SET(CMAKE_BUILD_TYPE Debug)
 
 

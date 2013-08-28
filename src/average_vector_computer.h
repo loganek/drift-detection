@@ -21,7 +21,7 @@ private:
 	FeatureList& features;
 	std::vector<int> angles;
 
-	int range = 5;
+	size_t range = 5;
 
 	int GetMostCommonAngle();
 	void CalculateAngles();
