@@ -9,6 +9,9 @@
 # Executable file
 drift_detection
 
+# Backup files
+*~
+
 # Compiled Dynamic libraries
 *.so
 *.dylib
