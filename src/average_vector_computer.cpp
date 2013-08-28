@@ -98,7 +98,7 @@ void AverageVectorComputer::RemoveStrangePoints(int commonAngle)
 {
 	for (size_t i = 0; i < angles.size(); i++)
 	{
-		if (status[i] && (angles[i] < commonAngle - range || angles[i] > commonAngle + range))
+		if (status[i] && (angles[i] < commonAngle - (int)range || angles[i] > commonAngle + (int)range))
 			status[i] = 0;
 	}
 }
