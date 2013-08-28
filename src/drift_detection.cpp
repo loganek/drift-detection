@@ -17,7 +17,7 @@ template<typename DisplayPolicy>
 int MainLoop()
 {
 	Mat image;
-	ImageSource<DisplayPolicy> imgProvider("/home/loganek/Downloads/naturalny.wmv");
+	ImageSource<DisplayPolicy> imgProvider("/home/loganek/Videos/quadro_videos/test3.wmv");
 	Detector detector;
 	time_t start,end;
 	image = imgProvider.GetImage();
