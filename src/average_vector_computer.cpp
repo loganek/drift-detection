@@ -11,9 +11,9 @@
 using namespace std;
 
 AverageVectorComputer::AverageVectorComputer(DebugInfo& debugInfo, vector<unsigned char>& status, FeatureList& features)
-	: debugInfo(debugInfo),
-	  status(status),
-	  features(features)
+: debugInfo(debugInfo),
+  status(status),
+  features(features)
 {
 }
 
@@ -28,15 +28,13 @@ DriftVector AverageVectorComputer::ComputeAverageVector()
 	RemoveStrangePoints(commonAngle);
 	DriftVector vect;
 
-	int cnt = 0;
 	for (auto s : status)
-		if (s) cnt++;
-
-	if (cnt)
-	{
-		vect.length = GetMeanLength();
-		vect.angle = commonAngle;
-	}
+		if (s)
+		{
+			vect.length = GetMeanLength();
+			vect.angle = commonAngle;
+			break;
+		}
 
 	debugInfo.driftVector = vect;
 	debugInfo.featureStatus = status;
