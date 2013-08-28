@@ -42,6 +42,7 @@ private:
 	constexpr static size_t minFeatures = 5;
 	const cv::TermCriteria termCriteria = cv::TermCriteria(cv::TermCriteria::COUNT|cv::TermCriteria::EPS,20,0.03);
 
+	void CleanVectors();
 	bool NeedFeatures();
 	bool CanProcess();
 	void CalculateFeatures();

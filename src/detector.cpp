@@ -69,10 +69,28 @@ void Detector::Process()
 
 	calcOpticalFlowPyrLK(prevImage, currImage, features[0], features[1], status, err, windowSize, 5, termCriteria, 0, 0.001);
 
+	CleanVectors();
+
 	debugInfo.featureStatus = status;
 	vect = avComputer->ComputeAverageVector();
 
 	UpdateRoute();
+}
+
+void Detector::CleanVectors()
+{
+	size_t i = 0;
+	while (i < status.size())
+	{
+		if (!status[i])
+		{
+			status.erase(status.begin() + i);
+			features[0].erase(features[0].begin() + i);
+			features[1].erase(features[1].begin() + i);
+		}
+		else
+			i++;
+	}
 }
 
 void Detector::UpdateRoute()

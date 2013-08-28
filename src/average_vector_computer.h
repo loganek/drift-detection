@@ -28,8 +28,6 @@ private:
 	void RemoveStrangePoints(int commonAngle);
 	AnglesHistogram BuildHistogram();
 	double GetMeanLength();
-
-	void CleanVectors();
 public:
 
 	AverageVectorComputer(DebugInfo& debugInfo, std::vector<unsigned char>& status, FeatureList& features);
