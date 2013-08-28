@@ -11,9 +11,9 @@
 using namespace std;
 
 AverageVectorComputer::AverageVectorComputer(DebugInfo& debugInfo, vector<unsigned char>& status, FeatureList& features)
-: debugInfo(debugInfo),
-  status(status),
-  features(features)
+	: debugInfo(debugInfo),
+	  status(status),
+	  features(features)
 {
 }
 
@@ -44,7 +44,6 @@ DriftVector AverageVectorComputer::ComputeAverageVector()
 
 	return vect;
 }
-// TODO: split CalculateAngles and RemoveStrangePoints together (in one loop and 'if' statement)
 
 AnglesHistogram AverageVectorComputer::BuildHistogram()
 {
@@ -66,9 +65,12 @@ void AverageVectorComputer::CalculateAngles()
 
 	for (size_t i = 0; i < status.size(); i++)
 	{
-		angles[i] = int(atan2(features[1][i].y - features[0][i].y, features[1][i].x - features[0][i].x) * 180 / M_PI);
-		if (angles[i] < 0)
-			angles[i] += 360;
+		if (status[i])
+		{
+			angles[i] = int(atan2(features[1][i].y - features[0][i].y, features[1][i].x - features[0][i].x) * 180 / M_PI);
+			if (angles[i] < 0)
+				angles[i] += 360;
+		}
 	}
 }
 
@@ -76,7 +78,7 @@ void AverageVectorComputer::RemoveStrangePoints(int commonAngle)
 {
 	for (size_t i = 0; i < angles.size(); i++)
 	{
-		if ((angles[i] < commonAngle - (int)range || angles[i] > commonAngle + (int)range))
+		if (status[i] && (angles[i] < commonAngle - (int)range || angles[i] > commonAngle + (int)range))
 			status[i] = 0;
 	}
 }
