@@ -9,7 +9,7 @@
 #include "detector.h"
 #include "debug_image_generator.h"
 #include <opencv2/highgui/highgui.hpp>
-
+#include <ctime>
 using namespace cv;
 using namespace std;
 
@@ -19,10 +19,11 @@ int MainLoop()
 	Mat image;
 	ImageSource<DisplayPolicy> imgProvider("/home/loganek/Downloads/naturalny.wmv");
 	Detector detector;
-
+	time_t start,end;
 	image = imgProvider.GetImage();
 	detector.PushImage(image);
-
+	time(&start);
+	int counter=0;
 	int i =0;
 	while (!image.empty())
 	{
@@ -31,7 +32,13 @@ int MainLoop()
 		detector.PushImage(image);
 		if (i > 2)
 		{
+
 			detector.Process();
+			time(&end);
+			++counter;
+			double sec=difftime(end,start);
+			double fps=counter/sec;
+			printf("\n%lf",fps);
 			imshow("TEST", DebugImageGenerator<
 					//FeatureListDebugOperator,
 					//ArrowFlowDebugOperator,

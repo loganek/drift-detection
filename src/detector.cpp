@@ -38,7 +38,6 @@ Detector::~Detector()
 const DebugInfo& Detector::GetDebugInfo()
 {
 	debugInfo.features = features;
-	features[0].clear();
 
 	return debugInfo;
 }
