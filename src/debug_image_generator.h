@@ -16,12 +16,12 @@
 
 struct FeatureListDebugOperator
 {
-	static void Process(cv::Mat& image, const DebugInfo& debugInfo)
+	static void process(cv::Mat& image, const DebugInfo& debug_info)
 	{
-		for (auto center : debugInfo.features[0])
+		for (auto center : debug_info.features[0])
 					cv::circle(image, center, 3, cv::Scalar(0, 255, 0));
 
-		for (auto center : debugInfo.features[1])
+		for (auto center : debug_info.features[1])
 			cv::circle(image, center, 3, cv::Scalar(0, 255, 255));
 	}
 };
@@ -29,7 +29,7 @@ struct FeatureListDebugOperator
 struct ArrowFlowDebugOperator
 {
 protected:
-	static void DrawArrow(cv::Mat& image, cv::Point2f second, cv::Point2f first, double angle, cv::Scalar color = cv::Scalar(0, 255, 0))
+	static void draw_arrow(cv::Mat& image, cv::Point2f second, cv::Point2f first, double angle, cv::Scalar color = cv::Scalar(240, 55, 24))
 	{
 		cv::Point2f p(first.x, first.y),
 				q(second.x, second.y);
@@ -47,13 +47,13 @@ protected:
 	}
 
 public:
-	static void Process(cv::Mat& image, const DebugInfo& debugInfo)
+	static void process(cv::Mat& image, const DebugInfo& debug_info)
 	{
-		for (size_t i = 0; i < debugInfo.featureStatus.size(); i++)
+		for (size_t i = 0; i < debug_info.feature_status.size(); i++)
 		{
-			if (debugInfo.featureStatus[i])
+			if (debug_info.feature_status[i])
 			{
-				DrawArrow(image, debugInfo.features[0][i], debugInfo.features[1][i], debugInfo.angles[i]);
+				draw_arrow(image, debug_info.features[0][i], debug_info.features[1][i], debug_info.angles[i]);
 			}
 		}
 	}
@@ -61,20 +61,20 @@ public:
 
 struct MainArrowDebugOperator : public ArrowFlowDebugOperator
 {
-	static void Process(cv::Mat& image, const DebugInfo& debugInfo)
+	static void process(cv::Mat& image, const DebugInfo& debug_info)
 	{
-		double angle = debugInfo.driftVector.angle * M_PI / 180;
+		double angle = debug_info.drift_vector.angle * M_PI / 180;
 		const cv::Point2f center(100, 100);
-		double x = debugInfo.driftVector.length * cos(angle);
-		double y = debugInfo.driftVector.length * sin(angle);
+		double x = debug_info.drift_vector.length * cos(angle);
+		double y = debug_info.drift_vector.length * sin(angle);
 
-		DrawArrow(image, center, cv::Point2f(x + center.x, y + center.y), debugInfo.driftVector.angle, cv::Scalar(50, 100, 150));
+		draw_arrow(image, center, cv::Point2f(x + center.x, y + center.y), debug_info.drift_vector.angle, cv::Scalar(50, 100, 150));
 	}
 };
 
 struct DrawRouteDebugOperator
 {
-	static void Process(cv::Mat& image, const DebugInfo& debugInfo)
+	static void process(cv::Mat& image, const DebugInfo& debugInfo)
 	{
 		double dx = 400, dy = 250;
 		for (PointList::reverse_iterator delta = debugInfo.route->rbegin(); delta != debugInfo.route->rend(); delta++)
@@ -92,25 +92,25 @@ class DebugImageGenerator
 private:
 	template<std::size_t I = 0, typename... Tp>
 	inline typename std::enable_if<I == sizeof...(Tp), void>::type
-	Process(std::tuple<Tp...>& t, cv::Mat, const DebugInfo& debugInfo)
+	process(std::tuple<Tp...>& t, cv::Mat, const DebugInfo& debug_info)
 	{}
 
 	template<std::size_t I = 0, typename... Tp>
 	inline typename std::enable_if<I < sizeof...(Tp), void>::type
-	Process(std::tuple<Tp...>& t, cv::Mat& image, const DebugInfo& debugInfo)
+	process(std::tuple<Tp...>& t, cv::Mat& image, const DebugInfo& debug_info)
 	{
-		std::get<I>(t).Process(image, debugInfo);
-		Process<I + 1, Tp...>(t, image, debugInfo);
+		std::get<I>(t).process(image, debug_info);
+		process<I + 1, Tp...>(t, image, debug_info);
 	}
 
 public:
-	cv::Mat operator()(const cv::Mat& image, const DebugInfo& debugInfo)
+	cv::Mat operator()(const cv::Mat& image, const DebugInfo& debug_info)
 	{
 		cv::Mat img;
 
 		image.copyTo(img);
 		std::tuple<Op...> t;
-		Process(t, img, debugInfo);
+		process(t, img, debug_info);
 
 		return img;
 	}

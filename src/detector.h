@@ -18,18 +18,18 @@
 struct DebugInfo
 {
 	FeatureList features;
-	std::vector<unsigned char> featureStatus;
+	std::vector<unsigned char> feature_status;
 	std::vector<int> angles;
-	DriftVector driftVector;
+	DriftVector drift_vector;
 	PointList* route;
 };
 
 class Detector
 {
 private:
-	cv::Mat prevImage;
-	cv::Mat currImage;
-	cv::Mat featureROI;
+	cv::Mat prev_image;
+	cv::Mat curr_image;
+	cv::Mat feature_roi;
 
 	DriftVector vect;
 	std::vector<unsigned char> status;
@@ -38,27 +38,27 @@ private:
 
 	FeatureList features;
 
-	constexpr static int maxFeatures = 100;
-	constexpr static size_t minFeatures = 5;
-	const cv::TermCriteria termCriteria = cv::TermCriteria(cv::TermCriteria::COUNT|cv::TermCriteria::EPS,20,0.03);
+	constexpr static int max_features = 100;
+	constexpr static size_t min_features = 5;
+	const cv::TermCriteria term_criteria = cv::TermCriteria(cv::TermCriteria::COUNT|cv::TermCriteria::EPS,20,0.03);
 
-	bool NeedFeatures();
-	bool CanProcess();
-	void CalculateFeatures();
-	void UpdateRoute();
+	bool need_features();
+	bool can_process();
+	void calculate_features();
+	void update_route();
 
-	void CalculateFeatureROI(const cv::Rect& roi);
+	void calculate_feature_roi(const cv::Rect& roi);
 
 	DebugInfo debugInfo;
 
-	AverageVectorComputer* avComputer;
+	AverageVectorComputer* av_computer;
 public:
 	Detector();
 	virtual ~Detector();
 
-	void PushImage(const cv::Mat& image);
-	void Process();
-	const DebugInfo& GetDebugInfo();
+	void push_image(const cv::Mat& image);
+	void process();
+	const DebugInfo& get_debug_info();
 };
 
 #endif /* DETECTOR_H_ */

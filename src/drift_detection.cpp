@@ -9,54 +9,51 @@
 #include "detector.h"
 #include "debug_image_generator.h"
 #include <opencv2/highgui/highgui.hpp>
-#include <ctime>
-using namespace cv;
-using namespace std;
+#include <iostream>
 
 template<typename DisplayPolicy>
-int MainLoop()
+void MainLoop(const std::string& filename)
 {
-	Mat image;
-	ImageSource<DisplayPolicy> imgProvider("/home/loganek/Videos/quadro_videos/test3.wmv");
+	cv::Mat image;
+	ImageSource<DisplayPolicy> img_provider(filename);
 	Detector detector;
-	time_t start,end;
-	image = imgProvider.GetImage();
-	detector.PushImage(image);
-	time(&start);
-	int counter=0;
-	int i =0;
-	while (!image.empty())
+
+	for (int i = 0; i < 3; i++)
 	{
-		cv::moveWindow("TEST", -60, 10);
-		image = imgProvider.GetImage();
-		detector.PushImage(image);
-		if (i > 2)
-		{
-
-			detector.Process();
-			time(&end);
-			++counter;
-			double sec=difftime(end,start);
-			double fps=counter/sec;
-			printf("\n%lf",fps);
-			imshow("TEST", DebugImageGenerator<
-					//FeatureListDebugOperator,
-					//ArrowFlowDebugOperator,
-					MainArrowDebugOperator,
-					DrawRouteDebugOperator
-					>()(image, detector.GetDebugInfo()));
-		}
-		else
-		{
-			imshow("TEST", image);
-		}
-		i++;
+		image = img_provider.get_image();
+		detector.push_image(image);
+		cv::imshow("TEST", image);
 	}
+	cv::moveWindow("TEST", -60, 10);
 
-	return 0;
+	while (true)
+	{
+		detector.process();
+		cv::imshow("TEST", DebugImageGenerator<
+			   //FeatureListDebugOperator,
+			   //ArrowFlowDebugOperator
+			   //MainArrowDebugOperator,
+			   DrawRouteDebugOperator
+				>()(image, detector.get_debug_info()));
+		image = img_provider.get_image();
+		if (image.empty())
+			break;
+
+		detector.push_image(image);
+	}
 }
 
-int main()
+int main(int argc, char** argv)
 {
-	return MainLoop<Continuous>();
+	if (argc != 2)
+		std::cout << "Usage: " << argv[0] << " <filename>" << std::endl;
+
+	MainLoop<
+	  FrameByFrame
+	  //Continuous
+	>(argv[1]);
+
+	std::cin.ignore().get(); 
+
+	return 0;
 }

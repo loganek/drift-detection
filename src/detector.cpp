@@ -17,64 +17,64 @@ using namespace std;
 Detector::Detector()
 {
 	debugInfo.route = &route;
-	CalculateFeatureROI(Rect(160, 60, 540, 400));
-	avComputer = new AverageVectorComputer(debugInfo, status, features);
+	calculate_feature_roi(Rect(160, 60, 540, 400));
+	av_computer = new AverageVectorComputer(debugInfo, status, features);
 }
 
-void Detector::CalculateFeatureROI(const Rect& roi)
+void Detector::calculate_feature_roi(const Rect& roi)
 {
-	featureROI = Mat(480, 854, CV_8UC1, Scalar(0));
+	feature_roi = Mat(480, 854, CV_8UC1, Scalar(0));
 
 	for (int i = roi.y; i < roi.y + roi.height - 30; i++)
 		for (int j = roi.x; j < roi.x + roi.width; j++)
-			featureROI.at<unsigned char>(i, j) = 255;
+			feature_roi.at<unsigned char>(i, j) = 255;
 }
 
 Detector::~Detector()
 {
-	delete avComputer;
+	delete av_computer;
 }
 
-const DebugInfo& Detector::GetDebugInfo()
+const DebugInfo& Detector::get_debug_info()
 {
 	debugInfo.features = features;
 
 	return debugInfo;
 }
 
-void Detector::PushImage(const Mat& image)
+void Detector::push_image(const Mat& image)
 {
-	currImage.copyTo(prevImage);
-	image.copyTo(currImage);
-	cvtColor(currImage, currImage, COLOR_BGR2GRAY);
+	curr_image.copyTo(prev_image);
+	image.copyTo(curr_image);
+	cvtColor(curr_image, curr_image, COLOR_BGR2GRAY);
 
-	if (NeedFeatures())
-		CalculateFeatures();
+	if (need_features())
+		calculate_features();
 }
 
-bool Detector::CanProcess()
+bool Detector::can_process()
 {
-	return !currImage.empty() && !prevImage.empty();
+	return !curr_image.empty() && !prev_image.empty();
 }
 
-void Detector::Process()
+void Detector::process()
 {
 	static Size windowSize(21, 21);
 
-	if (!CanProcess())
+	if (!can_process())
 		throw runtime_error("Cannot run algorithm: not enough images.");
 
 	vector<float> err;
 
-	calcOpticalFlowPyrLK(prevImage, currImage, features[0], features[1], status, err, windowSize, 5, termCriteria, 0, 0.001);
+	calcOpticalFlowPyrLK(prev_image, curr_image, features[0], features[1], status, err, windowSize, 5, term_criteria, 0, 0.001);
 
-	debugInfo.featureStatus = status;
-	vect = avComputer->ComputeAverageVector();
+	debugInfo.feature_status = status;
+	vect = av_computer->ComputeAverageVector();
 
-	UpdateRoute();
+	update_route();
 }
 
-void Detector::UpdateRoute()
+void Detector::update_route()
 {
 	float angle = vect.angle * M_PI / 180;
 
@@ -84,15 +84,15 @@ void Detector::UpdateRoute()
 	route.push_back(cv::Point2f(x, y));
 }
 
-bool Detector::NeedFeatures()
+bool Detector::need_features()
 {
-	return features[0].size() < minFeatures;
+	return features[0].size() < min_features;
 }
 
-void Detector::CalculateFeatures()
+void Detector::calculate_features()
 {
 	static Size winSize(10, 10), minusOneSize(-1, -1);
 
-	goodFeaturesToTrack(currImage, features[0], maxFeatures, 0.03, 50, featureROI, 3, false, 0.4);
-	cornerSubPix(currImage, features[0], winSize, minusOneSize, termCriteria);
+	goodFeaturesToTrack(curr_image, features[0], max_features, 0.03, 50, feature_roi, 3, false, 0.4);
+	cornerSubPix(curr_image, features[0], winSize, minusOneSize, term_criteria);
 }

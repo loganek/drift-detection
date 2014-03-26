@@ -41,7 +41,7 @@ public:
 	}
 	virtual ~ImageSource() {}
 
-	cv::Mat GetImage()
+	cv::Mat get_image()
 	{
 		cv::Mat img;
 

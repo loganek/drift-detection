@@ -36,8 +36,8 @@ DriftVector AverageVectorComputer::ComputeAverageVector()
 			break;
 		}
 
-	debugInfo.driftVector = vect;
-	debugInfo.featureStatus = status;
+	debugInfo.drift_vector = vect;
+	debugInfo.feature_status = status;
 	debugInfo.angles = angles;
 
 	return vect;
